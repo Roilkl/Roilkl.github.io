@@ -21,7 +21,7 @@ main:
    # url: /year-archive/
     
   - title: "CV"
-    url: assets/Haolin Fan CV.pdf
+    url: cv.pdf
     
   # - title: "CV"
   #   url: /cv-json/
