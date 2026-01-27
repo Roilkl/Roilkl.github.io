@@ -15,25 +15,14 @@ I particularly recommend the note **"Quantization of N = 1 Super-Yang–Mills Th
 
 ## Publications & Notes
 
-{% raw %}
-{% if site.data.notes %}
-  <ul style="list-style: none; padding: 0;">
-  {% for note in site.data.notes %}
-    <li style="margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-      <h3 style="margin-top: 0;">{{ note.title }}</h3>
-      <p>Size: {{ note.size_kb }} KB</p>
-      <div>
-        <a href="{{ note.url }}" target="_blank" style="background: #dc3545; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; margin-right: 10px;">
-          📄 Open PDF
-        </a>
-        <a href="{{ note.github_url }}" target="_blank" style="background: #24292e; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none;">
-          🔗 View on GitHub
-        </a>
-      </div>
-    </li>
-  {% endfor %}
-  </ul>
-{% else %}
-  <p>No notes available yet.</p>
-{% endif %}
-{% endraw %}
+{% for note in site.data.notes %}
+<div class="publication">
+  <h3>{{ note.title }}</h3>
+  <p>Size: {{ note.size_kb }} KB</p>
+  <p>
+    <a href="{{ note.url }}" target="_blank" class="btn">Open PDF</a>
+    <a href="{{ note.github_url }}" target="_blank" class="btn">View on GitHub</a>
+  </p>
+</div>
+<hr>
+{% endfor %}
