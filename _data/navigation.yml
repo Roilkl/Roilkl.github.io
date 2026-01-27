@@ -21,7 +21,8 @@ main:
    # url: /year-archive/
     
   - title: "CV"
-    url: cv.pdf
+    url: /cv.pdf  # 这里直接链接到PDF文件
+    external: true              # 重要！标记为外部链接
     
   # - title: "CV"
   #   url: /cv-json/
