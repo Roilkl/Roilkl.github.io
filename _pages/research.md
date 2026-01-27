@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // 可选：自动刷新功能（每5分钟检查一次更新）
-setInterval(loadPDFs, 5 * 60 * 1000);
+setInterval(loadPDFs, 60 * 60 * 1000);
 </script>
 
 <hr>
