@@ -15,55 +15,103 @@ I particularly recommend the note **"Quantization of N = 1 Super-Yang–Mills Th
 
 ## Publications & Notes
 
-<div id="pdf-list">Loading notes...</div>
+{% raw %}
+{% if site.data.notes %}
+  <ul class="notes-list">
+  {% for note in site.data.notes %}
+    <li class="note-item">
+      <div class="note-header">
+        <h3>{{ note.title }}</h3>
+        <span class="note-size">{{ note.size_kb }} KB</span>
+      </div>
+      <div class="note-links">
+        <a href="{{ note.url }}" target="_blank" class="btn btn-pdf">
+          <i class="fas fa-file-pdf"></i> Open PDF
+        </a>
+        <a href="{{ note.github_url }}" target="_blank" class="btn btn-github">
+          <i class="fab fa-github"></i> View on GitHub
+        </a>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>No notes available yet. Notes will appear here once the GitHub Actions workflow runs.</p>
+  <p>You can manually trigger the update: 
+    <a href="https://github.com/Roilkl/Roilkl.github.io/actions/workflows/update-notes.yml" target="_blank">
+      Run workflow
+    </a>
+  </p>
+{% endif %}
+{% endraw %}
 
-<script>
-// 直接从GitHub获取PDF文件列表
-async function loadNotes() {
-  try {
-    // GitHub API获取note仓库文件
-    const response = await fetch('https://api.github.com/repos/Roilkl/note/contents/');
-    const files = await response.json();
-    
-    // 筛选PDF文件
-    const pdfFiles = files.filter(file => file.name.endsWith('.pdf'));
-    
-    const container = document.getElementById('pdf-list');
-    
-    if (pdfFiles.length === 0) {
-      container.innerHTML = '<p>No notes found. Upload PDF files to <a href="https://github.com/Roilkl/note">Roilkl/note</a> repository.</p>';
-      return;
-    }
-    
-    // 按文件名排序
-    pdfFiles.sort((a, b) => a.name.localeCompare(b.name));
-    
-    // 生成简单列表
-    let html = '<ul>';
-    pdfFiles.forEach(file => {
-      const title = file.name.replace('.pdf', '').replace(/_/g, ' ');
-      const pdfUrl = `https://raw.githubusercontent.com/Roilkl/note/main/${file.name}`;
-      const githubUrl = `https://github.com/Roilkl/note/blob/main/${file.name}`;
-      
-      html += `
-        <li style="margin-bottom: 15px; padding: 10px; border-left: 3px solid #dc3545; background: #f8f9fa;">
-          <strong>${title}</strong><br>
-          <a href="${pdfUrl}" target="_blank" style="margin-right: 10px;">📄 Open PDF</a>
-          <a href="${githubUrl}" target="_blank">🔗 View on GitHub</a>
-        </li>
-      `;
-    });
-    html += '</ul>';
-    
-    container.innerHTML = html;
-    
-  } catch (error) {
-    document.getElementById('pdf-list').innerHTML = 
-      `<p style="color: red;">Error loading notes: ${error.message}</p>
-       <p>Check if <a href="https://github.com/Roilkl/note">Roilkl/note</a> repository exists and is public.</p>`;
-  }
+<style>
+.notes-list {
+  list-style: none;
+  padding: 0;
 }
 
-// 页面加载时执行
-document.addEventListener('DOMContentLoaded', loadNotes);
-</script>
+.note-item {
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note-header h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: #24292e;
+}
+
+.note-size {
+  color: #6a737d;
+  font-size: 0.9em;
+}
+
+.note-links {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.btn-pdf {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-pdf:hover {
+  background-color: #c82333;
+  color: white;
+}
+
+.btn-github {
+  background-color: #24292e;
+  color: white;
+}
+
+.btn-github:hover {
+  background-color: #1b1f23;
+  color: white;
+}
+
+.btn i {
+  margin-right: 5px;
+}
+</style>
