@@ -291,6 +291,9 @@ defaults:
       author_profile: true
       share: true
 
+# 在文件适当位置添加：
+cv_pdf: "Haolin Fan CV.pdf"  # 如果放在assets/pdf/目录
+
 
 # Sass/SCSS
 sass:
