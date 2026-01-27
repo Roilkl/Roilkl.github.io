@@ -19,48 +19,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'
-        
-    - name: Install dependencies
-      run: pip install PyGithub
+        python-version: '3.x'
         
     - name: Generate notes list
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python << 'EOF'
-from github import Github
-import yaml
-import os
-
-g = Github(os.environ['GITHUB_TOKEN'])
-repo = g.get_repo("Roilkl/note")
-contents = repo.get_contents("")
-
-notes = []
-for file in contents:
-    if file.name.endswith('.pdf'):
-        notes.append({
-            'title': file.name.replace('.pdf', '').replace('_', ' '),
-            'filename': file.name,
-            'url': f"https://raw.githubusercontent.com/Roilkl/note/main/{file.name}",
-            'github_url': f"https://github.com/Roilkl/note/blob/main/{file.name}",
-            'size_kb': round(file.size / 1024, 1)
-        })
-
-notes.sort(key=lambda x: x['filename'])
-
-os.makedirs('_data', exist_ok=True)
-with open('_data/notes.yml', 'w') as f:
-    yaml.dump(notes, f, default_flow_style=False)
-    
-print(f"Found {len(notes)} PDF files")
-EOF
+        echo "这是测试，稍后完善" > _data/notes.yml
         
-    - name: Commit and push if changed
+    - name: Commit and push
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git add _data/notes.yml
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update notes list [skip ci]"
+        git commit -m "Test workflow [skip ci]" || echo "No changes"
         git push
