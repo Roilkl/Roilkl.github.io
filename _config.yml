@@ -23,8 +23,8 @@ repository               : "https://github.com/Roilkl/"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "./In Quincy.jpg"
-  name             : "Haolin Fan"
+  avatar           : "/Roilkl/Roilkl.github.io/In Quincy.jpg"
+  name             : #"Haolin Fan"
   pronouns         : # example: "she/her"  
   bio              : #"Short biography for the left-hand sidebar"
   location         : "China"
