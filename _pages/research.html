@@ -1,0 +1,14 @@
+---
+title: Research
+permalink: /research/
+---
+
+<h2>My Research</h2>
+
+{% for note in site.data.notes %}
+<p>
+    <strong>{{ note.title }}</strong><br>
+    <a href="{{ note.url }}">PDF</a> | 
+    <a href="{{ note.github_url }}">GitHub</a>
+</p>
+{% endfor %}
