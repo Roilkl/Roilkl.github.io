@@ -15,20 +15,72 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.9'
         
-    - name: Generate notes list
+    - name: Create notes list script
       run: |
-        echo "这是测试，稍后完善" > _data/notes.yml
+        cat > get_notes.py << 'EOF'
+import requests
+import yaml
+import os
+
+# GitHub API获取note仓库文件
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')
+headers = {'Authorization': f'token {GITHUB_TOKEN}'} if GITHUB_TOKEN else {}
+
+response = requests.get(
+    'https://api.github.com/repos/Roilkl/note/contents',
+    headers=headers
+)
+
+if response.status_code == 200:
+    files = response.json()
+    notes = []
+    
+    for file in files:
+        if file['name'].lower().endswith('.pdf'):
+            notes.append({
+                'title': file['name'].replace('.pdf', '').replace('_', ' '),
+                'filename': file['name'],
+                'url': f"https://raw.githubusercontent.com/Roilkl/note/main/{file['name']}",
+                'github_url': f"https://github.com/Roilkl/note/blob/main/{file['name']}",
+                'size_kb': round(file['size'] / 1024, 1)
+            })
+    
+    # 按文件名排序
+    notes.sort(key=lambda x: x['filename'])
+    
+    # 保存到YAML
+    os.makedirs('_data', exist_ok=True)
+    with open('_data/notes.yml', 'w') as f:
+        yaml.dump(notes, f, default_flow_style=False)
+    
+    print(f"Found {len(notes)} PDF files:")
+    for note in notes:
+        print(f"  - {note['filename']}")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
+    # 创建空列表作为fallback
+    os.makedirs('_data', exist_ok=True)
+    with open('_data/notes.yml', 'w') as f:
+        yaml.dump([], f)
+EOF
         
-    - name: Commit and push
+    - name: Run notes script
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: python get_notes.py
+        
+    - name: Commit and push if changed
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git add _data/notes.yml
-        git commit -m "Test workflow [skip ci]" || echo "No changes"
-        git push
+        git diff --cached --quiet || (git commit -m "Update notes list [skip ci]" && git push)
